@@ -1,59 +1,60 @@
-public class StudentGradingSystem {
+const students = ["Ama", "Kofi", "Yaw"];
+const scores = [85, 72, 48];
 
-    public static void main(String[] args) {
+function getGrade(score) {
+    if (score >= 80) return "A";
+    if (score >= 70) return "B";
+    if (score >= 60) return "C";
+    if (score >= 50) return "D";
+    return "F";
+}
 
-        // Array to store student names
-        String[] names = {"Ama", "Kofi", "Yaw"};
+function runGradingSystem() {
+    const output = document.getElementById("results");
 
-        // Array to store student scores
-        int[] scores = {85, 72, 48};
+    if (!output) {
+        alert("Error: The results section is missing from index.html.");
+        return;
+    }
 
-        int total = 0;
-        int highestScore = scores[0];
-        String highestStudent = names[0];
+    let total = 0;
+    let highestIndex = 0;
+    let html = "<h2>Student Results</h2>";
 
-        System.out.println("STUDENT GRADING SYSTEM");
-        System.out.println("----------------------");
+    for (let i = 0; i < scores.length; i++) {
+        total += scores[i];
 
-        // Display names, scores and grades
-        for (int i = 0; i < scores.length; i++) {
-
-            total += scores[i];
-
-            String grade;
-
-            if (scores[i] >= 80) {
-                grade = "A";
-            } else if (scores[i] >= 70) {
-                grade = "B";
-            } else if (scores[i] >= 60) {
-                grade = "C";
-            } else if (scores[i] >= 50) {
-                grade = "D";
-            } else {
-                grade = "F";
-            }
-
-            System.out.println("Student: " + names[i]);
-            System.out.println("Score: " + scores[i]);
-            System.out.println("Grade: " + grade);
-            System.out.println();
-
-            // Find the highest score
-            if (scores[i] > highestScore) {
-                highestScore = scores[i];
-                highestStudent = names[i];
-            }
+        if (scores[i] > scores[highestIndex]) {
+            highestIndex = i;
         }
 
-        // Calculate the average
-        double average = (double) total / scores.length;
+        html += `
+            <p>
+                <strong>${students[i]}</strong>:
+                ${scores[i]} marks —
+                Grade ${getGrade(scores[i])}
+            </p>
+        `;
+    }
 
-        System.out.println("----------------------");
-        System.out.println("Total Score: " + total);
-        System.out.printf("Average Score: %.2f%n", average);
-        System.out.println("Highest Scoring Student: "
-                + highestStudent);
-        System.out.println("Highest Score: " + highestScore);
+    const average = total / scores.length;
+
+    html += `
+        <hr>
+        <p><strong>Average:</strong> ${average.toFixed(2)}</p>
+        <p><strong>Highest:</strong> ${students[highestIndex]}
+        (${scores[highestIndex]} marks)</p>
+    `;
+
+    output.innerHTML = html;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const button = document.getElementById("runButton");
+
+    if (button) {
+        button.addEventListener("click", runGradingSystem);
+    }
+});
     }
 }
